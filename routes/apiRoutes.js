@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const authorize = require('../middleware');
+
+router.use(authorize);
 
 //get all records
-router.get('/all', (req, res) => {
+router.get('/all', authorize, (req, res, next) => {
     db.todo.findAll().then(todos => res.send(todos));
+    console.log(req.body);
 });
 
 //get single record by id
@@ -52,21 +56,31 @@ router.put('/edit', (req, res) => {
 
 //bulk delete request
 router.delete('/bulkdelete/:id1/:id2/:id3', (req, res) => {
-    let ids =  req.params;
+    let ids = [];
+    for(let id in req.params){
+        ids.push(req.params[id])
+    }
     db.todo.destroy(
         {
-            where: { id: [ids.id1, ids.id2, ids.id3]}
+            where: { id: ids }
         }
     ).then(() => res.send('deleted bulk successfully'));
 });
 
 //bulk update request
 router.put('/bulkupdate', (req, res) => {
-    let ids =  req.body;
+    let ids = [];
+    for(let id in req.body){
+        console.log(id, (id != req.body.text))
+        if(id != 'text'){
+        ids.push(req.body[id])
+        }
+        console.log(ids);
+    }
     db.todo.update({text: req.body.text},
         {
             where: {
-              id: [req.body.id1, req.body.id2, req.body.id3]
+            id : ids
             }
         }
     ).then(() => {res.send('updated in bulk successfully')});
