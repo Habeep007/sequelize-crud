@@ -15,7 +15,9 @@
     "express": "^4.17.2",
     "git": "^0.1.5",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.12.5",
+    "sequelize": "^6.12.5"
+  },
+  "devDependencies": {
     "sequelize-cli": "^6.3.0"
   }
 }
