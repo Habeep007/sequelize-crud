@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../models');
 const authorize = require('../middleware');
 
-router.use(authorize);
+//router.use(authorize);
 
 //get all records
-router.get('/all', authorize, (req, res, next) => {
+router.get('/all', (req, res, next) => {
     db.todo.findAll().then(todos => res.send(todos));
     console.log(req.body);
 });
@@ -32,7 +32,7 @@ router.post('/new', (req, res) => {
 });
 
 // delete request
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', authorize, (req, res) => {
     db.todo.destroy({
         where: {
             id: req.params.id,
@@ -55,7 +55,7 @@ router.put('/edit', (req, res) => {
 });
 
 //bulk delete request
-router.delete('/bulkdelete/:id1/:id2/:id3', (req, res) => {
+router.delete('/bulkdelete/:id1/:id2/:id3', authorize, (req, res) => {
     let ids = [];
     for(let id in req.params){
         ids.push(req.params[id])
