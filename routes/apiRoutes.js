@@ -31,6 +31,21 @@ router.post('/new', (req, res) => {
     });
 });
 
+//posting new user
+router.post('/adduser',  (req, res) => {
+  const user = db.User.build({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName
+    })
+      console.log( db.User.classLevelMethod());
+      user.save();
+      
+      console.log( user.instanceLevelmethod());
+      console.log( user.getFullName());
+      res.send(user);
+    
+});
+
 // delete request
 router.delete('/delete/:id', authorize, (req, res) => {
     db.todo.destroy({
